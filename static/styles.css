@@ -1,0 +1,460 @@
+/* =========================================================
+   Haptic Verify — Blue palette
+   Swatches: #091540 · #1B2CC1 · #7692FF · #ABD2FA
+   Pad input: tap = S, hold = L
+   ========================================================= */
+
+/* ---------- Design tokens ---------- */
+:root {
+  --bg:        #091540;
+  --bg-soft:   #0d1c52;
+  --surface:   #12236a;
+  --surface-2: #1a2d82;
+  --ink:       #eef3ff;
+  --ink-mute:  #a8b6e0;
+  --ink-faint: #6d7cb0;
+
+  --accent:    #7692FF;
+  --accent-2:  #ABD2FA;
+  --on-accent: #091540;
+
+  --line:      #22317a;
+  --line-soft: #182568;
+
+  --ok:        #7692FF;
+  --bad:       #ff8f9f;
+
+  --radius:    14px;
+  --radius-sm: 10px;
+  --gap:       1rem;
+
+  --shadow-card: 0 1px 0 rgba(255,255,255,.05) inset,
+                 0 20px 50px -30px rgba(0,0,0,.9);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:        #eaf1fc;
+    --bg-soft:   #f3f7fd;
+    --surface:   #ffffff;
+    --surface-2: #e6eefb;
+    --ink:       #091540;
+    --ink-mute:  #3a4a86;
+    --ink-faint: #7b8ac0;
+
+    --accent:    #1B2CC1;
+    --accent-2:  #2638d6;
+    --on-accent: #ffffff;
+
+    --line:      #cddaf3;
+    --line-soft: #dde7f8;
+
+    --ok:        #1B2CC1;
+    --bad:       #b3283d;
+
+    --shadow-card: 0 1px 0 rgba(0,0,0,.02),
+                   0 18px 40px -28px rgba(9,21,64,.35);
+  }
+}
+
+/* ---------- Reset & base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 112.5%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background:
+    radial-gradient(1200px 600px at 50% -20%,
+                    color-mix(in srgb, var(--accent) 12%, transparent),
+                    transparent 60%),
+    var(--bg);
+  color: var(--ink);
+  font-family: "Atkinson Hyperlegible", system-ui, -apple-system, sans-serif;
+  line-height: 1.55;
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Top bar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  max-width: 48rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.brand { display: inline-flex; align-items: center; gap: .55rem; }
+
+.brand-dot {
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.brand-name { font-weight: 700; letter-spacing: .01em; }
+
+.brand-note {
+  font-size: .85rem;
+  color: var(--ink-faint);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* ---------- Layout ---------- */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 4rem;
+}
+
+.skip {
+  position: absolute;
+  left: -999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  padding: .5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+}
+.skip:focus { left: 1rem; top: 1rem; z-index: 10; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.75rem 1.5rem 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+/* ---------- Typography ---------- */
+.eyebrow {
+  margin: 0 0 .35rem;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+h1 {
+  margin: 0 0 .5rem;
+  font-size: 1.65rem;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+
+.lede {
+  margin: 0 0 1.5rem;
+  color: var(--ink-mute);
+  max-width: 42ch;
+}
+
+.section { margin-bottom: 1.25rem; }
+
+.section-label {
+  display: block;
+  margin: 0 0 .5rem;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.prompt {
+  margin: 0 0 .85rem;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--ink);
+}
+.prompt:focus { outline: none; }
+
+.hint {
+  margin: .5rem 0 1rem;
+  font-size: .92rem;
+  color: var(--ink-mute);
+}
+.hint b { color: var(--ink); font-weight: 700; }
+
+.divider {
+  height: 1px;
+  background: var(--line-soft);
+  margin: 1.5rem -1.5rem;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  font: inherit;
+  font-weight: 700;
+  min-height: 2.75rem;
+  padding: .55rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background .12s ease, border-color .12s ease,
+              color .12s ease, transform .06s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.btn:not(:disabled):active { transform: translateY(1px); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+.btn .icon { font-size: 1.05rem; line-height: 1; }
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+  box-shadow: 0 1px 0 rgba(255,255,255,.15) inset;
+}
+.btn-primary:not(:disabled):hover {
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+}
+
+.btn-ghost {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--ink);
+}
+.btn-ghost:not(:disabled):hover { border-color: var(--ink-faint); }
+
+.btn-tiny {
+  min-height: 2.1rem;
+  padding: .3rem .7rem;
+  font-size: .88rem;
+  font-weight: 400;
+  color: var(--ink-mute);
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 999px;
+}
+.btn-tiny:not(:disabled):hover {
+  color: var(--ink);
+  border-color: var(--ink-faint);
+}
+
+.btn-wide {
+  width: 100%;
+  min-height: 3rem;
+  font-size: 1.05rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+}
+
+.row-tools {
+  display: flex;
+  gap: .5rem;
+  margin-top: .25rem;
+}
+
+/* ---------- Answer input ---------- */
+.answer {
+  display: block;
+  width: 100%;
+  font: inherit;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: .35rem;
+  text-align: center;
+  padding: .85rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--line);
+  background: var(--bg-soft);
+  color: var(--ink);
+  transition: border-color .12s ease, background .12s ease;
+}
+.answer::placeholder {
+  color: var(--ink-faint);
+  letter-spacing: .2rem;
+  font-weight: 400;
+}
+.answer:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.answer:disabled { opacity: .55; }
+
+/* ---------- Pattern entry pad (tap = S, hold = L) ---------- */
+.pad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  width: 100%;
+  min-height: 9rem;
+  margin: .75rem 0 1rem;
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  border: 2px solid var(--line);
+  background: var(--surface-2);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  transition: transform .08s ease, border-color .12s ease,
+              background .12s ease, box-shadow .12s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  position: relative;
+}
+
+.pad:not(:disabled):hover { border-color: var(--ink-faint); }
+.pad:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Feedback states applied via JS */
+.pad.is-pressed {
+  transform: scale(.985);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface-2));
+}
+.pad.is-armed {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-2) 30%, transparent);
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface-2));
+}
+.pad.is-committed {
+  animation: pad-commit .28s ease-out;
+}
+@keyframes pad-commit {
+  0%   { transform: scale(.985); }
+  55%  { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Concentric ring + dot */
+.pad-ring {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--accent) 55%, var(--line));
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  transition: transform .1s ease, border-color .12s ease,
+              background .12s ease;
+}
+
+.pad-dot {
+  display: block;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent);
+  transition: transform .1s ease, background .12s ease;
+}
+
+.pad.is-pressed .pad-ring {
+  transform: scale(.92);
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.pad.is-armed .pad-dot {
+  background: var(--accent-2);
+  transform: scale(1.25);
+}
+.pad.is-armed .pad-ring {
+  border-color: var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 22%, transparent);
+}
+
+.pad-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+.pad-sub {
+  font-size: .82rem;
+  color: var(--ink-mute);
+  letter-spacing: .02em;
+}
+.pad.is-armed .pad-sub { color: var(--accent-2); }
+
+/* ---------- Notices & status ---------- */
+.notice {
+  margin: 0 0 1.25rem;
+  padding: .9rem 1rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+  color: var(--ink);
+  font-size: .95rem;
+}
+.notice strong { display: block; margin-bottom: .15rem; }
+
+.status {
+  min-height: 1.75rem;
+  margin-top: 1rem;
+  font-weight: 700;
+  font-size: .95rem;
+  color: var(--ink-mute);
+}
+.status.ok  { color: var(--ok); }
+.status.bad { color: var(--bad); }
+
+.footnote {
+  margin: 1.5rem 0 0;
+  text-align: center;
+  font-size: .85rem;
+  color: var(--ink-faint);
+  letter-spacing: .04em;
+}
+
+/* ---------- Focus ---------- */
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+button:focus-visible,
+input:focus-visible { outline-offset: 2px; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .pad.is-committed { animation: none; }
+  .pad,
+  .pad-ring,
+  .pad-dot { transition: none; }
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 420px) {
+  .brand-note { display: none; }
+  .card { padding: 1.4rem 1.15rem 1.25rem; }
+  h1 { font-size: 1.45rem; }
+  .pad { min-height: 8rem; }
+  .pad-ring { width: 2.85rem; height: 2.85rem; }
+  .answer {
+    letter-spacing: .25rem;
+    font-size: 1.2rem;
+  }
+}
