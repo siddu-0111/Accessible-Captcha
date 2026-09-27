@@ -1,12 +1,10 @@
 """Flask server for the haptic-only accessible CAPTCHA.
 
 Issues challenges and verifies answers once.
+Production entrypoint: `gunicorn -w 1 -b 0.0.0.0:$PORT app:app`
 
-Production entrypoint:
-    gunicorn -w 1 -b 0.0.0.0:$PORT app:app
-
-IMPORTANT: challenge store, HMAC key and rate limiters live in-process, so
-run with a SINGLE worker. If you need multiple workers, move state to Redis.
+IMPORTANT: state (challenge store, HMAC key, rate limiters) lives in-process.
+Run with a single worker, or move state to Redis before scaling out.
 """
 import hashlib
 import hmac
@@ -52,10 +50,6 @@ class SlidingWindow:
             self.hits[key].append(time.time())
 
     def hit(self, key) -> int:
-        # blocked() and record() take the lock separately, so two concurrent
-        # requests can both observe "under limit" and both record. Fine at
-        # these thresholds; make it atomic (or use Redis) if you need strict
-        # enforcement.
         retry = self.blocked(key)
         if not retry:
             self.record(key)
@@ -64,7 +58,7 @@ class SlidingWindow:
 
 def create_app(config=None):
     cfg = dict(
-        TTL=120,                    # seconds a challenge stays valid
+        TTL=25,                     # seconds a challenge stays valid
         CHALLENGES_PER_MIN=15,      # per IP
         FAILS_PER_5MIN=10,          # per IP, then temporary block
         LOG_PATH=os.path.join(HERE, "logs", "events.jsonl"),
@@ -168,7 +162,7 @@ def create_app(config=None):
     return app
 
 
-app = create_app()  # gunicorn target: `gunicorn app:app`
+app = create_app()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",

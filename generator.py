@@ -6,11 +6,10 @@ the user feels it (Vibration API) and types it back as S (short) / L (long).
 import random
 from dataclasses import dataclass, field
 
-_rng = random.SystemRandom()  # unpredictable challenge choices
+_rng = random.SystemRandom()
 
 # Milliseconds per pulse type and the silent gap between pulses.
-# Slow and clearly distinguishable so the pattern is easy to follow by touch.
-PULSE_MS = {"short": 250, "long": 700, "gap": 500}
+PULSE_MS = {"short": 300, "long": 900, "gap": 500}
 
 MIN_PULSES = 4
 MAX_PULSES = 5
@@ -29,7 +28,7 @@ def make_haptic_challenge() -> Challenge:
     while True:
         n = _rng.randint(MIN_PULSES, MAX_PULSES)
         pattern = "".join(_rng.choice("SL") for _ in range(n))
-        if "S" in pattern and "L" in pattern:   # avoid all-same patterns
+        if "S" in pattern and "L" in pattern:
             break
     prompt = (
         "Feel the vibration pattern, then type it using S for a short pulse "
